@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNet.Identity
+@using Booking.Web.Helpers
+
+<ul class="floatRight">
+    <!-- if (Request.IsAuthenticated) -->
+    @if(AuthHelper.IsLoggedIn())
+    {
+        using (Html.BeginForm("Logout","Auth", FormMethod.Post, new { id = "logoutForm", @class = "" }))
+        {
+            @Html.AntiForgeryToken()
+            <li>
+                @Html.ActionLink("Hello " + AuthHelper.CurrentUser.Email.ToString() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log af</a></li>
+        }
+    }
+    else
+    {
+        <li>@Html.ActionLink("Register", "SignUp", "Auth", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Auth", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    }
+</ul>

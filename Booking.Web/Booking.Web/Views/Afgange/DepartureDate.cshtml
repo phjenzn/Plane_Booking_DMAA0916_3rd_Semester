@@ -1,0 +1,124 @@
+﻿@model Booking.Web.Models.BookingViewModel
+
+<div class="booking_partial someShadow">
+    <div class="badget someShadow">2</div>
+
+    @{
+        if (Model.FromDestination > 0 && Model.ToDestination > 0)
+        {
+            if (Model.OneWay)
+            {
+                <h2>Departure date</h2>
+            }
+            else
+            {
+                <h2>Departure / Return dates</h2>
+            }
+            <fieldset id="TravelType" class="ny">
+
+                @if (Model.OneWay)
+                {
+                    @Html.Label("Return", new { @for = "OneWay-1" })
+                    @Html.RadioButtonFor(x => x.OneWay, false, new { @class = "ny", @id = "OneWay-1" })
+                    @Html.Label("One-Way", new { @for = "OneWay-2" })
+                    @Html.RadioButtonFor(x => x.OneWay, true, new { @class = "ny", @id = "OneWay-2", @checked = "checked" })
+                }
+                else
+                {
+                    @Html.Label("Return", new { @for = "OneWay-1" })
+                    @Html.RadioButtonFor(x => x.OneWay, false, new { @class = "ny", @id = "OneWay-1", @checked = "checked" })
+                    @Html.Label("One-Way", new { @for = "OneWay-2" })
+                    @Html.RadioButtonFor(x => x.OneWay, true, new { @class = "ny", @id = "OneWay-2" })
+                }
+
+
+            </fieldset>
+
+            @Html.Label("Departure Date:", new { @class = "ny" })
+            @Html.TextBoxFor(x => x.OneWayDate, new { @class = "ny" })
+
+            @Html.Label("Return Date:", new { @class = "ny", @id = "lblReturnDate", @style = "display: none;" })
+            @Html.TextBoxFor(x => x.ReturnDate, new { @class = "ny", @style = "display: none;" })
+
+            string oneways = "";
+            foreach (var o in Model.Departures)
+            {
+                oneways = oneways + "\"" + o.When.Day + "-" + o.When.Month + "-" + o.When.Year + "\", ";
+            }
+            oneways = oneways.TrimEnd(' ');
+            oneways = oneways.TrimEnd(',');
+
+            string returnss = "";
+            foreach (var o in Model.Returns)
+            {
+                returnss = returnss + "\"" + o.When.Day + "-" + o.When.Month + "-" + o.When.Year + "\", ";
+            }
+            returnss = returnss.TrimEnd(' ');
+            returnss = returnss.TrimEnd(',');
+
+            <script>
+                $(document).ready(function () {
+
+                    var onewayDates = [ @Html.Raw(oneways) ];
+                    var returnDates = [ @Html.Raw(returnss) ];
+                    //var returnDates = ["9-12-2017", "14-12-2017", "15-12-2017"];
+
+                        function onewayavailable(date) {
+                            dmy = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+                            if ($.inArray(dmy, onewayDates) !== -1) {
+                            return [true, "", "Available"];
+                        } else {
+                            return [false, "", "unAvailable"];
+                        }
+                    }
+
+                    function returnsavailable(date) {
+                        dmy = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+                        if ($.inArray(dmy, returnDates) !== -1) {
+                        return [true, "", "Available"];
+                    } else {
+                        return [false, "", "unAvailable"];
+                    }
+                }
+
+                    // Date pickers
+                    $("#OneWayDate").attr("readonly", "readonly");
+                    $("#ReturnDate").attr("readonly", "readonly");
+                    $("#OneWayDate").datepicker({ beforeShowDay: onewayavailable });
+                    $("#ReturnDate").datepicker({ beforeShowDay: returnsavailable });
+
+                    // OneWay OR Return
+                    $("OneWay").checkboxradio();
+                    $("#TravelType").controlgroup();
+
+                if ($('input[name=OneWay]:checked').val() == "False") {
+                        $("#ReturnDate, #lblReturnDate").show();
+                }
+
+                    // Refresh
+                    $("OneWay").checkboxradio("refresh");
+
+
+                    // Triggers
+                    $("#OneWay-1, #OneWay-2").change(function () {
+                    if ($('input[name=OneWay]:checked').val() == "True") {
+                            $("#ReturnDate, #lblReturnDate").hide();
+                    }
+                        else {
+                            $("#ReturnDate, #lblReturnDate").show();
+                    }
+
+                        $(this).closest("form").submit();
+                });
+
+                    $("#ReturnDate, #OneWayDate").change(function () {
+                        $(this).closest("form").submit();
+                });
+
+            });
+            </script>
+
+        }
+
+    }
+</div>

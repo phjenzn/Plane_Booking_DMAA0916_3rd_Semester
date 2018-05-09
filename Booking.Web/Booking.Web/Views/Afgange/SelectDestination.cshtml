@@ -1,0 +1,21 @@
+﻿@model Booking.Web.Models.BookingViewModel
+
+@{
+    ViewBag.Title = "Vælge Fra / Til";
+}
+<div id="Page_Afgange">
+    @using (Html.BeginForm("SelectDestination", "Afgange", FormMethod.Post, new { @class = "ny" }))
+    {
+        @Html.Partial("Destinations", Model)
+        <br />
+        @Html.Partial("DepartureDate", Model)
+        <br />
+        @Html.Partial("NumberOfPassengers", Model)
+        <br />
+        @Html.Partial("Departures", Model)
+        <br />
+        @Html.Partial("Passengers", Model)
+        <br />
+        @Html.Partial("Booking", Model)
+    }
+</div>

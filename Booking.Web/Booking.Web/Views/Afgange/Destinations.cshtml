@@ -1,0 +1,25 @@
+﻿@model Booking.Web.Models.BookingViewModel
+
+<div class="booking_partial someShadow">
+    <div class="badget">1</div>
+    <h2>From / To:</h2>
+
+    @{
+        
+            @Html.Label("From:", new { @class = "ny" });
+            @Html.DropDownListFor(x => x.FromDestination, new SelectList(Model.Destinations, "Id", "Name"), new { @class = "ny" })
+
+            @Html.Label("To:", new { @class = "ny" });
+            @Html.DropDownListFor(x => x.ToDestination, new SelectList(Model.Destinations, "Id", "Name"), new { @class = "ny" })
+
+       
+    }
+
+    <script>
+                $(document).ready(function () {
+                        $("#FromDestination, #ToDestination").change(function () {
+                            $(this).closest("form").submit();
+                        });
+                });
+    </script>
+</div>

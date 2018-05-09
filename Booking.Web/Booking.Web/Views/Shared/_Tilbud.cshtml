@@ -1,0 +1,32 @@
+﻿@using Booking.Web.Helpers
+
+<div style="width: 770px; height: inherit;">
+    <div class="">
+        <p>Rejser!</p>
+        <h1>Tilbuds Rejser</h1>
+    </div>
+    @{
+        try
+        {
+            Booking.Web.BookingServiceRemote.ServiceClient client = ViewBag.proxy;
+            var dept = client.GetAllTilbud();
+
+            foreach(var d in dept)
+            {
+                <div class="Boxed floatLeft">
+                    <h1>@d.EndDestination.NameDestination</h1>
+                    <h3>Fra @d.StartDestination.NameDestination</h3>
+                    <h3>Fra/enkeltbillet</h3>
+                </div>
+            }
+        }
+        catch (Exception)
+        {
+            <p>Der er sket en fejl!</p>
+        }
+
+    }
+</div>
+
+
+
